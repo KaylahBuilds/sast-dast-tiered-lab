@@ -12,6 +12,10 @@ Initial authoring date: 2026-10-10. Separate demonstrated behavior from tooling 
 | ZAP / Docker scan | Not run | No claim of passive or active scanner coverage. |
 | Real authentication, production deployment, branch protection | Not implemented or configured | Fixed tenant context is a simulation, not verified identity. |
 
-The GitHub workflow enables all four self-contained live HTTP integration cases in addition to the 27 offline checks. Inspect [the exact workflow run](https://github.com/KaylahBuilds/sast-dast-tiered-lab/actions/workflows/offline-checks.yml) for the commit you use; a later CI result does not retroactively mean local scanners were run. Its network tests only call the ephemeral service started by the test process on literal `127.0.0.1`.
+## Verified GitHub runner result
+
+[Run 38108386307](https://github.com/KaylahBuilds/sast-dast-tiered-lab/actions/runs/38108386307) tested commit `7eb4cd47f2477470ac4eedffe0d12a01f58cbc23` on Ubuntu with Python 3.12: **all 31 tests passed, with no skips**, including all four self-contained live loopback HTTP cases. The run log confirms `RUN_LOCAL_HTTP_TESTS=1` and each integration case's success. This proves those selected runtime behaviors, not general scanner coverage.
+
+The initial run reported the older action runtime's deprecation warning. The workflow's checkout and Python-setup actions were subsequently updated to verified full-commit v6 pins. Inspect [the workflow run](https://github.com/KaylahBuilds/sast-dast-tiered-lab/actions/workflows/offline-checks.yml) for the exact commit you use. A CI result does not retroactively mean local scanners were run. Network tests only call the ephemeral service started by the test process on literal `127.0.0.1`.
 
 The initial scanner commands are instructions to validate, not captured successful results. Before using any check as a gate, execute both known-vulnerable and repaired cases, inspect failures and coverage, and record versions and outcomes in the [evidence worksheet](tier-3-risk-driven/evidence-template.md). Do not replace skipped or failed analysis with a success label.
