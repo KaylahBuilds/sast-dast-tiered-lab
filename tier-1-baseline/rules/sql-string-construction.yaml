@@ -1,0 +1,25 @@
+rules:
+  - id: lab-python-sql-string-construction
+    languages:
+      - python
+    severity: WARNING
+    message: >-
+      Review SQL assembled inside execute(): concatenation or formatting can
+      place data into SQL syntax. Prefer a fixed SQL statement with separately
+      bound values. This lab rule does not prove input provenance or tenant
+      authorization; inspect the matched call before classifying it.
+    metadata:
+      category: security
+      technology:
+        - python
+        - sqlite3
+      cwe:
+        - "CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')"
+      confidence: LOW
+      purpose: Local educational candidate detection, not production coverage
+    options:
+      constant_propagation: false
+    pattern-either:
+      - pattern: $DB.execute($LEFT + $RIGHT, ...)
+      - pattern: $DB.execute($FORMAT % $VALUE, ...)
+      - pattern: $DB.execute($FORMAT.format(...), ...)
